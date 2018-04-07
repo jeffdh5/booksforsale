@@ -1,30 +1,26 @@
 sudo: required
 language: python
 services:
-  - docker
+- docker
 python:
-  - "3.6"
+- '3.6'
 before_script:
-  - docker-compose build
+- docker-compose build
 script:
-  - docker-compose run --rm web bash -c "flake8 . &&
-                                         python wait_for_postgres.py &&
-                                         ./manage.py test"
-
+- docker-compose run --rm web bash -c "flake8 . && python wait_for_postgres.py &&
+  ./manage.py test"
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login --username=_ --password="$HEROKU_AUTH_TOKEN" registry.heroku.com;
-    docker tag web registry.heroku.com/booksforsale_api-prod/web;
-    docker push registry.heroku.com/booksforsale_api-prod/web;
-    fi
-  - if [ "$TRAVIS_BRANCH" == "qa" ]; then
-    docker login --username=_ --password="$HEROKU_AUTH_TOKEN" registry.heroku.com;
-    docker tag web registry.heroku.com/booksforsale_api-qa/web;
-    docker push registry.heroku.com/booksforsale_api-qa/web;
-    fi
-
+- if [ "$TRAVIS_BRANCH" == "master" ]; then docker login --username=_ --password="$HEROKU_AUTH_TOKEN"
+  registry.heroku.com; docker tag web registry.heroku.com/booksforsale_api-prod/web;
+  docker push registry.heroku.com/booksforsale_api-prod/web; fi
+- if [ "$TRAVIS_BRANCH" == "qa" ]; then docker login --username=_ --password="$HEROKU_AUTH_TOKEN"
+  registry.heroku.com; docker tag web registry.heroku.com/booksforsale_api-qa/web;
+  docker push registry.heroku.com/booksforsale_api-qa/web; fi
 notifications:
   email: false
-
 cache:
   pip: true
+env:
+  global:
+  - secure: VA64ywGUkHm/x9UR6J506qgD/WAV+ocwbDpxejbmpoYjOGMtsEhPumQnearP3CveqcYCwkUXT+psyuH2UovZFpMtTkXp7GwgvVZ45PIA15PJomQU2+yRnj+fdQVSyQOthio2ppUMKDjr9xNvH1aTlrV1Yg1YxWCcBVAvGl2wNg0KvGmhTAA8c26PytGznYTkmkiv5duXpDwLeM1obzhedyTK5OYeN2Y8PSEJQc3pNYXM9ZhkJkLBWL9tIv3icrRwT4CLOLQlo/fOfnQYhSs5DtU9KImKeHJsSbkS8CAAIULu1H4YRV/6yINxTXbKLiyqVOX/QpCNKVfBvDMwWKxHRFNs+igLHsIlwTa0rM+O8B0LKb8U6CnDqAXVlpr4HQGd+wFJNug9i3NQ+SejxiS/eUyt5kXNuJNHn1BqvBR7ave4tNjw7O+QZ7K29vO2nqDJH6JpkHZOXvH5oAhylNVy4jnjKEiP4fMX31f4ZWocwX7D8OzDTppniG0Wla9eQ8he0hdox/39N26T9yQ8uPdaTHO2g+I50R9yPu+R8p6j6TCa/+TS/EtMooNM3XGrp5ROPaDRN7KaLFMNHrOnF+foF+ORKTt/mjocqDXuc7IX7iPUtgTKa1CkzTp1ADZm/NMSwH8VoPeEZDhAKuSbjO636O0phcue2UGamT5hTxwscek=
+  - secure: lcKNPdtwf2c/LE/8hI2slJ9jtBRbhDmEPvQaN8r+OSCzhCMcPnhOY1ObJBaYr/m64HBeylR9vVYI2AujgEwU55oVHxlBhtjFTE5TTsvE86HtTH/0/68FebIV20bEPFJgNHLw1nYVgkwn0WKRdVypKlCoEVJrE204vrt/HAmWajxI5KLH2xjrtV7dijq9V7ksCsCaAaa5N8uDXQaDcmH69tc+OhozVsMrDuLBCODSAh5dqzb4HcrNpjGaHMCQh+3n2FxTg7wBm9LHn+1eix/HXEen6XmjTdV6vDlOmF2y1ToNaXgbPOCzmBRhe78AAmWSprh5OitfR3tc2tHsgoMclaYVOrkHUmBxICW2jgMZvJL/ieJCvSnA0+ywyiWxuHXoODEjvQ3PTXfSK4DjFaRioMivmJPHIa543QScga3MTD2TEvqSJPidpM8DdZKaaAxaJlRHYYmqp4wu8CFkT73p3i8ibHsUGpay9H8oBJtVZlF12h9n22hqYiaLORT1aww765Y4gGL+I/kOPukYlNpGPaspQ7FBMRavgdJlcOF5UETO83FfrzP3250ugJgbK2EEXX9X6U2j6z7O+NC8h9E6HS1uFbYxirRO5SKa/QIF9CeOxfvFWLo8ZMd3+KGBSu8XcNCqoelP1ICnAqWVxMW8dgW+tDUQ1im2kpQzz7HkqAI=
